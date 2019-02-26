@@ -1,0 +1,8 @@
+{
+  "name": "whats-the-weather-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:chungleee/whats-the-weather-app.git",
+  "author": "Leon <leon.karho.chung@gmail.com>",
+  "license": "MIT"
+}
