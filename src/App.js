@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
+import axios from 'axios'
 import LocationDisplay from './components/LocationDisplay';
 import TemperatureDisplay from './components/TemperatureDisplay';
 
-import { darkSkyKey } from '../keys/apikey'
-
 class App extends Component {
-	state = {
-		
+	componentDidMount() {
+
 	}
 
 	render() {
