@@ -2,3 +2,11 @@
 	margin: 0;
 	padding: 0;
 }
+
+.background {
+	background-image: url('./img/cloudy.jpg');
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	height: 100vh;
+}

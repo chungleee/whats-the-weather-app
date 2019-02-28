@@ -1,9 +1,14 @@
 import React, { Component } from 'react'
+import LocationDisplay from './components/LocationDisplay';
+import TemperatureDisplay from './components/TemperatureDisplay';
 
 class App extends Component {
 	render() {
 		return (
-			<h1>hello world</h1>
+			<div className='background'>
+				<LocationDisplay />
+				<TemperatureDisplay />
+			</div>
 		)
 	}
 }
