@@ -2,9 +2,9 @@ import React from 'react'
 
 const LocationDisplay = () => {
 	return (
-		<div>
-			<h3>Montreal</h3>
-			<h5>Thursday, 28 Feb '19</h5>
+		<div className='location-box'>
+			<h3 className='city'>Montreal</h3>
+			<h5 className='date'>Thursday, 28 Feb '19</h5>
 		</div>
 	)
 }
