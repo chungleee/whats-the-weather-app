@@ -15,7 +15,7 @@ app.use(cors(options))
 app.use(morgan('tiny'))
 
 const url = 'https://api.darksky.net/forecast/0123456789abcdef9876543210fedcba/42.3601,-71.0589'
-app.get('/weather', (req, res) => {
+app.get('/currently', (req, res) => {
 	axios
 		.get(`https://api.darksky.net/forecast/${darkSkyKey}/42.3601,-71.0589`)
 		.then((response) => {
