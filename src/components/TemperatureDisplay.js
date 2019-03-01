@@ -1,10 +1,10 @@
 import React from 'react'
 
-const TemperatureDisplay = () => {
+const TemperatureDisplay = ({ degree, summary }) => {
 	return (
 		<div className='temp-box'>
-			<h1 className='degree'>-5&deg;</h1>
-			<h5 className='weather'>Snowing</h5>
+			<h1 className='degree'>{ degree }&deg;</h1>
+			<h5 className='weather'>{ summary }</h5>
 		</div>
 	)
 }
