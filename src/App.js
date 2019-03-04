@@ -20,16 +20,17 @@ class App extends Component {
 			})
 	}
 
+	// unix timestamp converter
 	handleUnixToDay = (unix_timestamp) => {
 		const date = new Date(unix_timestamp*1000)
 		return date.toLocaleString()
 	}
-
+	// F to C converter
 	handleFtoC = (f) => {
 		const c = (f - 32) * 5/9
 		return Math.round( c * 10 ) / 10 .toString()
 	}
-
+	// get location
 	handleGetLocation = () => {
 		return new Promise((resolve, reject) => {
 			if(navigator.geolocation) {
@@ -41,17 +42,17 @@ class App extends Component {
 			}
 		})	
 	}
-
+	// request to get weather json data
 	handleGetWeather = (coords) => {
+		// get request
 			axios
 				.get(`http://localhost:3000/currently/${coords.latitude},${coords.longitude}`)
 				.then((response) => {
-					console.log(response.data)
-
+					// convert F to C
 					const temperatureInC = this.handleFtoC(response.data.currently.temperature)
-					
+					// convert unix timestamp to local time
 					const currentTime = this.handleUnixToDay(response.data.currently.time)
-
+					// set the state
 					this.setState({
 						currentWeather: response.data.currently,
 						temperatureInC,
@@ -64,6 +65,7 @@ class App extends Component {
 	}
 
 	render() {
+		// destructuring
 		const { temperatureInC, currentWeather, currentTime } = this.state
 
 		return (
