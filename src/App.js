@@ -20,6 +20,11 @@ class App extends Component {
 			})
 	}
 
+	handleUnixToDay = (unix_timestamp) => {
+		const date = new Date(unix_timestamp*1000)
+		return date.toLocaleString()
+	}
+
 	handleFtoC = (f) => {
 		const c = (f - 32) * 5/9
 		return Math.round( c * 10 ) / 10 .toString()
@@ -44,11 +49,13 @@ class App extends Component {
 					console.log(response.data)
 
 					const temperatureInC = this.handleFtoC(response.data.currently.temperature)
-
+					
+					const currentTime = this.handleUnixToDay(response.data.currently.time)
 
 					this.setState({
 						currentWeather: response.data.currently,
-						temperatureInC
+						temperatureInC,
+						currentTime
 					})
 				})
 				.catch(error => {
