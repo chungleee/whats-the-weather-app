@@ -6,6 +6,7 @@ import TemperatureDisplay from './components/TemperatureDisplay';
 class App extends Component {
 	state = {
 		currentWeather: {},
+		temperatureInC: '',
 		currentTime: '',
 	}
 
@@ -17,6 +18,11 @@ class App extends Component {
 			.catch((error) => {
 				console.log(error)
 			})
+	}
+
+	handleFtoC = (f) => {
+		const c = (f - 32) * 5/9
+		return Math.round( c * 10 ) / 10 .toString()
 	}
 
 	handleGetLocation = () => {
@@ -36,8 +42,13 @@ class App extends Component {
 				.get(`http://localhost:3000/currently/${coords.latitude},${coords.longitude}`)
 				.then((response) => {
 					console.log(response.data)
+
+					const temperatureInC = this.handleFtoC(response.data.currently.temperature)
+
+
 					this.setState({
-						currentWeather: response.data.currently
+						currentWeather: response.data.currently,
+						temperatureInC
 					})
 				})
 				.catch(error => {
@@ -46,13 +57,13 @@ class App extends Component {
 	}
 
 	render() {
-		const { currentWeather, currentTime } = this.state
+		const { temperatureInC, currentWeather, currentTime } = this.state
 
 		return (
 			<div className='container background'>
 				<LocationDisplay lastUpdated={currentTime} />
 				<TemperatureDisplay 
-					degree={ currentWeather.temperature } 
+					degree={ temperatureInC } 
 					summary={ currentWeather.summary }
 				/>
 			</div>
