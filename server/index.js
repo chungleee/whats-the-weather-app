@@ -15,11 +15,16 @@ app.use(cors(options))
 app.use(morgan('tiny'))
 
 const url = 'https://api.darksky.net/forecast/0123456789abcdef9876543210fedcba/42.3601,-71.0589'
-app.get('/currently', (req, res) => {
+
+app.get('/currently/:latitude,:longitude', (req, res) => {
+	const latitude = req.params.latitude
+	const longitude = req.params.longitude
+
 	axios
-		.get(`https://api.darksky.net/forecast/${darkSkyKey}/42.3601,-71.0589`)
+		.get(`https://api.darksky.net/forecast/${darkSkyKey}/${latitude},${longitude}`)
 		.then((response) => {
-			res.json(response.data.currently)
+			console.log(response.data)
+			res.status(200).json(response.data)
 		})
 		.catch((error) => {
 			console.log(error)
