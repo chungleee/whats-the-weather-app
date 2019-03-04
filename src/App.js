@@ -1,39 +1,48 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import moment from 'moment'
 import LocationDisplay from './components/LocationDisplay';
 import TemperatureDisplay from './components/TemperatureDisplay';
 
 class App extends Component {
 	state = {
 		currentWeather: {},
-		currentTime: ''
+		currentTime: '',
 	}
 
 	componentDidMount() {
-		this.handleGetWeather()
-		this.handleConvertTime(this.state.currentWeather.time)
-	}
-
-	handleConvertTime = (number) => {
-		const day = moment(number).calendar()
-		console.log(day)
-		this.setState({
-			currentTime: day
-		})
-	}
-
-	handleGetWeather = () => {
-		axios.get('http://localhost:3000/currently')
-			.then(response => {
-				console.log(response.data)
-				this.setState({
-					currentWeather: response.data
-				})
+		this.handleGetLocation()
+			.then((position) => {
+				this.handleGetWeather(position.coords)
 			})
-			.catch(error => {
+			.catch((error) => {
 				console.log(error)
 			})
+	}
+
+	handleGetLocation = () => {
+		return new Promise((resolve, reject) => {
+			if(navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition((position) => {
+					resolve(position)	
+				})
+			}	else {
+				reject('Geolocation is NOT available')
+			}
+		})	
+	}
+
+	handleGetWeather = (coords) => {
+			axios
+				.get(`http://localhost:3000/currently/${coords.latitude},${coords.longitude}`)
+				.then((response) => {
+					console.log(response.data)
+					this.setState({
+						currentWeather: response.data.currently
+					})
+				})
+				.catch(error => {
+					console.log(error)
+				})
 	}
 
 	render() {
