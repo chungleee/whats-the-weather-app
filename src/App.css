@@ -27,8 +27,16 @@ body {
 	background-repeat: no-repeat;
 	background-size: cover;
 	height: 100vh;
-	filter: grayscale(0.3);
-	z-index: 1;
+	position: relative;
+	z-index: -10;
+}
+
+.background-overlay {
+	background-color: rgba(0, 0, 0, 0.25);
+	height: 100%;
+	position: absolute;
+	width: 100%;
+	z-index: -5;
 }
 
 /* LOCATIONDISPLAY.JS */
@@ -57,4 +65,20 @@ body {
 
 .weather {
 	font-size: 2.5rem;
+}
+
+/* DARKSKYATTRIBUTION.JS */
+
+.attribution a {
+	color: #f1f1f1;
+	display: flex;
+	flex-direction: column;
+	font-size: 1.5rem;
+	text-align: center;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+
+.attribution a span {
+	font-size: 0.7rem;
 }

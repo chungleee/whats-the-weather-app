@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import LocationDisplay from './components/LocationDisplay';
 import TemperatureDisplay from './components/TemperatureDisplay';
+import DarkSkyAttribution from './components/DarkSkyAttribution';
+
 
 class App extends Component {
 	state = {
@@ -85,12 +87,16 @@ class App extends Component {
 		const { temperatureInC, currentWeather, currentTime } = this.state
 
 		return (
-			<div className='container background'>
-				<LocationDisplay lastUpdated={currentTime} />
-				<TemperatureDisplay 
-					degree={ temperatureInC } 
-					summary={ currentWeather.summary }
-				/>
+			<div className='background'>
+				<div className="background-overlay"></div>
+					<div className="container">
+						<LocationDisplay lastUpdated={currentTime} />
+						<TemperatureDisplay 
+							degree={ temperatureInC } 
+							summary={ currentWeather.summary }
+						/>
+						<DarkSkyAttribution />
+					</div>
 			</div>
 		)
 	}
