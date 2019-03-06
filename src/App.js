@@ -10,6 +10,7 @@ class App extends Component {
 		currentWeather: {},
 		temperatureInC: '',
 		currentTime: '',
+		currentLocation: ''
 	}
 
 	componentDidMount() {
@@ -62,35 +63,67 @@ class App extends Component {
 	}
 	// request to get weather json data
 	handleGetWeather = (coords) => {
+		axios.all([
+			axios.get(`http://localhost:3000/currently/${coords.latitude},${coords.longitude}`),
+			axios.get(`http://localhost:3000/location/${coords.latitude},${coords.longitude}`)
+		])
+		.then(axios.spread((currently, location) => {
+			console.log('currently:', currently)
+			console.log('location', location)	
+
+			// convert f to c
+			const temperatureInC = this.handleFtoC(currently.data.currently.temperature)
+
+			// convert unix timestamp to local time
+			const currentTime = this.handleUnixToDay(currently.data.currently.time)
+
+			// assign address to variable
+			const currentLocation = location.data.results[0].formatted_address
+
+			// set state
+			this.setState({
+				currentWeather: currently.data.currently,
+				temperatureInC,
+				currentTime,
+				currentLocation
+			})
+		}))
+		.catch((error) => {
+			console.log(error)
+		})
+
 		// get request
-			axios
-				.get(`http://localhost:3000/currently/${coords.latitude},${coords.longitude}`)
-				.then((response) => {
-					// convert F to C
-					const temperatureInC = this.handleFtoC(response.data.currently.temperature)
-					// convert unix timestamp to local time
-					const currentTime = this.handleUnixToDay(response.data.currently.time)
-					// set the state
-					this.setState({
-						currentWeather: response.data.currently,
-						temperatureInC,
-						currentTime
-					})
-				})
-				.catch(error => {
-					console.log(error)
-				})
+			// axios
+			// 	.get(`http://localhost:3000/currently/${coords.latitude},${coords.longitude}`)
+			// 	.then((response) => {
+			// 		// convert F to C
+			// 		const temperatureInC = this.handleFtoC(response.data.currently.temperature)
+			// 		// convert unix timestamp to local time
+			// 		const currentTime = this.handleUnixToDay(response.data.currently.time)
+			// 		// set the state
+			// 		this.setState({
+			// 			currentWeather: response.data.currently,
+			// 			temperatureInC,
+			// 			currentTime
+			// 		})
+			// 	})
+			// 	.catch(error => {
+			// 		console.log(error)
+			// 	})
 	}
 
 	render() {
 		// destructuring
-		const { temperatureInC, currentWeather, currentTime } = this.state
+		const { temperatureInC, currentWeather, currentTime, currentLocation } = this.state
 
 		return (
 			<div className='background'>
 				<div className="background-overlay"></div>
 					<div className="container">
-						<LocationDisplay lastUpdated={currentTime} />
+						<LocationDisplay 
+							lastUpdated={currentTime} 
+							currentLocation={currentLocation}
+						/>
 						<TemperatureDisplay 
 							degree={ temperatureInC } 
 							summary={ currentWeather.summary }
