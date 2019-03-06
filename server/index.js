@@ -3,7 +3,13 @@ const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
 const axios = require('axios')
-const { darkSkyKey } = require('../keys/apikey')
+
+const { darkSkyKey, googleMapsKey } = require('../keys/apikey')
+
+const googleMapsClient = require('@google/maps').createClient({
+	key: googleMapsKey,
+	Promise: Promise
+});
 
 const whitelist = ['http://localhost:8080']
 const options = {
@@ -30,6 +36,25 @@ app.get('/currently/:latitude,:longitude', (req, res) => {
 			console.log(error)
 		})
 })
+
+app.get('/location/:latitude,:longitude', (req, res) => {
+	const latitude = req.params.latitude
+	const longitude = req.params.longitude
+
+	googleMapsClient
+		.reverseGeocode({
+			latlng: [latitude, longitude]
+		})
+		.asPromise()
+		.then((response) => {
+			console.log(response)
+			res.status(200).json(response.json)
+		})
+		.catch((error) => {
+			console.log(error)
+		})
+})
+
 
 // init server
 const port = 3000 || process.env.PORT
