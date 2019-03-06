@@ -63,14 +63,12 @@ class App extends Component {
 	}
 	// request to get weather json data
 	handleGetWeather = (coords) => {
+		// concurrent get requests
 		axios.all([
 			axios.get(`http://localhost:3000/currently/${coords.latitude},${coords.longitude}`),
 			axios.get(`http://localhost:3000/location/${coords.latitude},${coords.longitude}`)
 		])
 		.then(axios.spread((currently, location) => {
-			console.log('currently:', currently)
-			console.log('location', location)	
-
 			// convert f to c
 			const temperatureInC = this.handleFtoC(currently.data.currently.temperature)
 
@@ -91,25 +89,6 @@ class App extends Component {
 		.catch((error) => {
 			console.log(error)
 		})
-
-		// get request
-			// axios
-			// 	.get(`http://localhost:3000/currently/${coords.latitude},${coords.longitude}`)
-			// 	.then((response) => {
-			// 		// convert F to C
-			// 		const temperatureInC = this.handleFtoC(response.data.currently.temperature)
-			// 		// convert unix timestamp to local time
-			// 		const currentTime = this.handleUnixToDay(response.data.currently.time)
-			// 		// set the state
-			// 		this.setState({
-			// 			currentWeather: response.data.currently,
-			// 			temperatureInC,
-			// 			currentTime
-			// 		})
-			// 	})
-			// 	.catch(error => {
-			// 		console.log(error)
-			// 	})
 	}
 
 	render() {
