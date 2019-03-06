@@ -33,13 +33,29 @@ class App extends Component {
 	// get location
 	handleGetLocation = () => {
 		return new Promise((resolve, reject) => {
+			// success cb
+			const success = (position) => {
+				resolve(position)	
+			}
+			// error cb
+			const error = (err) => {
+				reject(alert(`ERROR(${err.code}): ${err.message}`))
+			}
+			// options obj
+			const options = {
+				enableHighAccuracy: true,
+				timeout: 5000,
+				maximumAge: 0
+			}
+
 			if(navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition((position) => {
-					resolve(position)	
-				})
+				navigator
+					.geolocation
+					.getCurrentPosition(success, error, options)
 			}	else {
 				reject('Geolocation is NOT available')
 			}
+
 		})	
 	}
 	// request to get weather json data
