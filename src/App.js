@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import LocationDisplay from './components/LocationDisplay';
-import TemperatureDisplay from './components/TemperatureDisplay';
+import CurrentlyDisplay from './components/CurrentlyDisplay';
 import DarkSkyAttribution from './components/DarkSkyAttribution';
 
 
@@ -101,6 +101,8 @@ class App extends Component {
 		// destructuring
 		const { temperatureInC, currently, currentTime, currentLocation } = this.state
 
+		const feelsLike = this.handleFtoC(currently.apparentTemperature)
+
 		return (
 			<div className='background'>
 				<div className="background-overlay"></div>
@@ -109,9 +111,10 @@ class App extends Component {
 							lastUpdated={currentTime} 
 							currentLocation={currentLocation}
 						/>
-						<TemperatureDisplay 
+						<CurrentlyDisplay 
 							degree={ temperatureInC } 
 							summary={ currently.summary }
+							feelsLike={ Number.isNaN(feelsLike) ? '' : feelsLike }
 						/>
 						<DarkSkyAttribution />
 					</div>

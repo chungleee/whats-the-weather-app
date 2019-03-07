@@ -1,12 +1,13 @@
 import React from 'react'
 
-const TemperatureDisplay = ({ degree, summary }) => {
+const CurrentlyDisplay = ({ degree, summary, feelsLike }) => {
 	return (
 		<div className='temp-box'>
 			<h1 className='degree'>{ degree }&deg;</h1>
 			<h5 className='weather'>{ summary }</h5>
+			<h5>Feels like: { feelsLike }&deg;</h5>
 		</div>
 	)
 }
 
-export default TemperatureDisplay
+export default CurrentlyDisplay
