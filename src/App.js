@@ -3,6 +3,7 @@ import axios from 'axios'
 import LocationDisplay from './components/LocationDisplay';
 import CurrentlyDisplay from './components/CurrentlyDisplay';
 import DarkSkyAttribution from './components/DarkSkyAttribution';
+import NextTwentyFour from './components/NextTwentyFour';
 
 
 class App extends Component {
@@ -116,6 +117,8 @@ class App extends Component {
 							summary={ currently.summary }
 							feelsLike={ Number.isNaN(feelsLike) ? '' : feelsLike }
 						/>
+						<NextTwentyFour />
+
 						<DarkSkyAttribution />
 					</div>
 			</div>

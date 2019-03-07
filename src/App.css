@@ -69,6 +69,22 @@ body {
 	margin-bottom: 0.5rem;
 }
 
+/* NEXTTWENTYFOUR.JS */
+
+.hourly-block {
+	display: flex;
+	overflow-x: scroll;
+	width: 100%;
+}
+
+.hourly-block-items {
+	margin-right: 0.8rem;
+}
+
+.hourly-block-items h3 {
+	margin-bottom: 0.5rem;
+}
+
 /* DARKSKYATTRIBUTION.JS */
 
 .attribution a {
