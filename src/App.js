@@ -7,7 +7,10 @@ import DarkSkyAttribution from './components/DarkSkyAttribution';
 
 class App extends Component {
 	state = {
-		currentWeather: {},
+		currently: {},
+		minutely: {},
+		hourly: {},
+		daily: {},
 		temperatureInC: '',
 		currentTime: '',
 		currentLocation: ''
@@ -80,7 +83,10 @@ class App extends Component {
 
 			// set state
 			this.setState({
-				currentWeather: currently.data.currently,
+				currently: currently.data.currently,
+				minutely: currently.data.minutely,
+				hourly: currently.data.hourly,
+				daily: currently.data.daily,
 				temperatureInC,
 				currentTime,
 				currentLocation
@@ -93,7 +99,7 @@ class App extends Component {
 
 	render() {
 		// destructuring
-		const { temperatureInC, currentWeather, currentTime, currentLocation } = this.state
+		const { temperatureInC, currently, currentTime, currentLocation } = this.state
 
 		return (
 			<div className='background'>
@@ -105,7 +111,7 @@ class App extends Component {
 						/>
 						<TemperatureDisplay 
 							degree={ temperatureInC } 
-							summary={ currentWeather.summary }
+							summary={ currently.summary }
 						/>
 						<DarkSkyAttribution />
 					</div>
