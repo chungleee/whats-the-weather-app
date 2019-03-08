@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { handleFtoC, handleUnixToDay } from './util/utilities'
 import axios from 'axios'
 import LocationDisplay from './components/LocationDisplay';
 import CurrentlyDisplay from './components/CurrentlyDisplay';
@@ -8,13 +9,17 @@ import NextTwentyFour from './components/NextTwentyFour';
 
 class App extends Component {
 	state = {
+		// current
 		currently: {},
-		minutely: {},
-		hourly: {},
-		daily: {},
-		temperatureInC: '',
+		currentTemperatureInC: '',
 		currentTime: '',
-		currentLocation: ''
+		currentLocation: '',
+		// minute
+		minutely: {},
+		// hour
+		hourly: {},
+		// day
+		daily: {},
 	}
 
 	componentDidMount() {
@@ -27,16 +32,6 @@ class App extends Component {
 			})
 	}
 
-	// unix timestamp converter
-	handleUnixToDay = (unix_timestamp) => {
-		const date = new Date(unix_timestamp*1000)
-		return date.toLocaleString()
-	}
-	// F to C converter
-	handleFtoC = (f) => {
-		const c = (f - 32) * 5/9
-		return Math.round( c * 10 ) / 10 .toString()
-	}
 	// get location
 	handleGetLocation = () => {
 		return new Promise((resolve, reject) => {
@@ -74,10 +69,10 @@ class App extends Component {
 		])
 		.then(axios.spread((currently, location) => {
 			// convert f to c
-			const temperatureInC = this.handleFtoC(currently.data.currently.temperature)
+			const currentTemperatureInC = handleFtoC(currently.data.currently.temperature)
 
 			// convert unix timestamp to local time
-			const currentTime = this.handleUnixToDay(currently.data.currently.time)
+			const currentTime = handleUnixToDay(currently.data.currently.time)
 
 			// assign address to variable
 			const currentLocation = location.data.results[0].formatted_address
@@ -88,7 +83,7 @@ class App extends Component {
 				minutely: currently.data.minutely,
 				hourly: currently.data.hourly,
 				daily: currently.data.daily,
-				temperatureInC,
+				currentTemperatureInC,
 				currentTime,
 				currentLocation
 			})
@@ -100,9 +95,10 @@ class App extends Component {
 
 	render() {
 		// destructuring
-		const { temperatureInC, currently, currentTime, currentLocation } = this.state
+		const { currentTemperatureInC, currently, currentTime, currentLocation, hourlyTemperatureInC } = this.state
 
-		const feelsLike = this.handleFtoC(currently.apparentTemperature)
+		// convert feelslike temp
+		const feelsLike = handleFtoC(currently.apparentTemperature)
 
 		return (
 			<div className='background'>
@@ -113,11 +109,12 @@ class App extends Component {
 							currentLocation={currentLocation}
 						/>
 						<CurrentlyDisplay 
-							degree={ temperatureInC } 
+							degree={ currentTemperatureInC } 
 							summary={ currently.summary }
 							feelsLike={ Number.isNaN(feelsLike) ? '' : feelsLike }
 						/>
-						<NextTwentyFour />
+						<NextTwentyFour 
+						/>
 
 						<DarkSkyAttribution />
 					</div>
