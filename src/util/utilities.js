@@ -4,6 +4,12 @@ export const handleUnixToDay = (unix_timestamp) => {
 	return date.toLocaleString()
 }
 
+// unix timestamp to hours
+export const handleUnixToHours = (unix_timestamp) => {
+	const date = new Date(unix_timestamp*1000)
+	return date.getHours().toString()
+}
+
 // F to C converter
 export const handleFtoC = (f) => {
 	const c = (f - 32) * 5/9
