@@ -9,17 +9,19 @@ import NextTwentyFour from './components/NextTwentyFour';
 
 class App extends Component {
 	state = {
-		// current
+		// fetched data
 		currently: {},
+		minutely: {},
+		hourly: {},
+		daily: {},
+
+		// modified data
+		// current
 		currentTemperatureInC: '',
 		currentTime: '',
 		currentLocation: '',
-		// minute
-		minutely: {},
 		// hour
-		hourly: {},
-		// day
-		daily: {},
+		hourlyTemperatureInC: []
 	}
 
 	componentDidMount() {
@@ -30,6 +32,26 @@ class App extends Component {
 			.catch((error) => {
 				console.log(error)
 			})
+	}
+
+	componentDidUpdate(_, prevState) {
+		if(this.state.hourly !== prevState.hourly) {
+			const { hourly } = this.state
+			const hourlyTemperatureInC = []
+
+			// 1. loop through hourly.data.temperature
+			hourly.data.slice(0, 24).forEach((hour, idx) => {
+				// 2.	convert temperature to C
+				// 3.	push into hourly temperature in C arr
+				hourlyTemperatureInC.push(handleFtoC(hour.temperature))
+			})
+			// 4.	set state
+			this.setState({
+				hourlyTemperatureInC
+			})
+		} else {
+			console.log('false')
+		}
 	}
 
 	// get location
@@ -95,7 +117,7 @@ class App extends Component {
 
 	render() {
 		// destructuring
-		const { currentTemperatureInC, currently, currentTime, currentLocation, hourlyTemperatureInC } = this.state
+		const { currentTemperatureInC, currently, currentTime, currentLocation } = this.state
 
 		// convert feelslike temp
 		const feelsLike = handleFtoC(currently.apparentTemperature)
