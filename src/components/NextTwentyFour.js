@@ -1,7 +1,6 @@
 import React from 'react'
 
 const NextTwentyFour = ({ hours }) => {
-	console.log(hours)
 	return (
 		<div className='hourly-block'>
 			{

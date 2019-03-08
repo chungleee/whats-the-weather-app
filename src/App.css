@@ -73,7 +73,6 @@ body {
 
 .hourly-block {
 	display: flex;
-	/* justify-content: center; */
 	overflow-x: scroll;
 	width: 100%;
 }
