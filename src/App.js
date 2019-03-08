@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { handleFtoC, handleUnixToDay } from './util/utilities'
+import { handleFtoC, handleUnixToDay, handleUnixToHours } from './util/utilities'
 import axios from 'axios'
 import LocationDisplay from './components/LocationDisplay';
 import CurrentlyDisplay from './components/CurrentlyDisplay';
@@ -21,7 +21,7 @@ class App extends Component {
 		currentTime: '',
 		currentLocation: '',
 		// hour
-		hourlyTemperatureInC: []
+		hours: []
 	}
 
 	componentDidMount() {
@@ -37,17 +37,25 @@ class App extends Component {
 	componentDidUpdate(_, prevState) {
 		if(this.state.hourly !== prevState.hourly) {
 			const { hourly } = this.state
-			const hourlyTemperatureInC = []
+			const hours = []
 
 			// 1. loop through hourly.data.temperature
 			hourly.data.slice(0, 24).forEach((hour, idx) => {
 				// 2.	convert temperature to C
-				// 3.	push into hourly temperature in C arr
-				hourlyTemperatureInC.push(handleFtoC(hour.temperature))
+				const tempInC = handleFtoC(hour.temperature)
+				// 3. convert unix time
+				const currentTime = handleUnixToHours(hour.time)
+				// 4. put in obj
+				const obj = {
+					tempInC,
+					currentTime
+				}
+				// 5. push into hours array
+				hours.push(obj)
 			})
-			// 4.	set state
+			// 6. set state
 			this.setState({
-				hourlyTemperatureInC
+				hours
 			})
 		} else {
 			console.log('false')
@@ -117,7 +125,7 @@ class App extends Component {
 
 	render() {
 		// destructuring
-		const { currentTemperatureInC, currently, currentTime, currentLocation } = this.state
+		const { currentTemperatureInC, currently, currentTime, currentLocation, hours } = this.state
 
 		// convert feelslike temp
 		const feelsLike = handleFtoC(currently.apparentTemperature)
@@ -136,6 +144,7 @@ class App extends Component {
 							feelsLike={ Number.isNaN(feelsLike) ? '' : feelsLike }
 						/>
 						<NextTwentyFour 
+							hours={ hours }
 						/>
 
 						<DarkSkyAttribution />
