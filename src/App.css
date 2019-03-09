@@ -78,7 +78,10 @@ body {
 }
 
 .hourly-block-items {
-	margin-right: 0.8rem;
+	display: flex;
+	flex-direction: column;
+	margin: 0 auto;
+	padding: 0 0.5rem;
 }
 
 .hourly-block-items h3 {
