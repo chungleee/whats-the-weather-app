@@ -4,7 +4,7 @@ const cors = require('cors')
 const app = express()
 const axios = require('axios')
 
-const { darkSkyKey, googleMapsKey } = require('../keys/apikey')
+const { darkSkyKey, googleMapsKey } = require('../config/keys')
 
 const googleMapsClient = require('@google/maps').createClient({
 	key: googleMapsKey,
