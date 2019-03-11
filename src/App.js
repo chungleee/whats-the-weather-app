@@ -6,9 +6,25 @@ import CurrentlyDisplay from './components/CurrentlyDisplay';
 import DarkSkyAttribution from './components/DarkSkyAttribution';
 import NextTwentyFour from './components/NextTwentyFour';
 
+// import all images in ./img
+// const importAll = (r) => {
+// 	let images = {}
+// 	r.keys().forEach((image, index) => {
+// 		images[image.replace('./', '').replace('.jpg', '')] = r(image)
+// 	})
+// 	return images
+// }
+
+// const images = importAll(require.context('./img', false, /\.(jpg|png)$/))
+
 
 class App extends Component {
 	state = {
+		loading: true,
+
+		// images 
+		images: {},
+
 		// fetched data
 		currently: {},
 		minutely: {},
@@ -20,11 +36,18 @@ class App extends Component {
 		currentTemperatureInC: '',
 		currentTime: '',
 		currentLocation: '',
+		currentIcon: '',
 		// hour
 		hours: []
 	}
 
 	componentDidMount() {
+		const images = this.importAll(require.context('./img', false, /\.(jpg|png)$/))
+
+		this.setState({
+			images
+		})
+
 		this.handleGetLocation()
 			.then((position) => {
 				this.handleGetWeather(position.coords)
@@ -62,6 +85,14 @@ class App extends Component {
 		}
 	}
 
+	importAll = (r) => {
+		let images = {}
+		r.keys().forEach((image, index) => {
+			images[image.replace('./', '').replace('.jpg', '')] = r(image)
+		})
+		return images
+	}
+
 	// get location
 	handleGetLocation = () => {
 		return new Promise((resolve, reject) => {
@@ -90,6 +121,7 @@ class App extends Component {
 
 		})	
 	}
+
 	// request to get weather json data
 	handleGetWeather = (coords) => {
 		// concurrent get requests
@@ -109,10 +141,12 @@ class App extends Component {
 
 			// set state
 			this.setState({
+				loading: !this.state.loading,
 				currently: currently.data.currently,
 				minutely: currently.data.minutely,
 				hourly: currently.data.hourly,
 				daily: currently.data.daily,
+				currentIcon: currently.data.currently.icon,
 				currentTemperatureInC,
 				currentTime,
 				currentLocation
@@ -125,32 +159,40 @@ class App extends Component {
 
 	render() {
 		// destructuring
-		const { currentTemperatureInC, currently, currentTime, currentLocation, hours } = this.state
+		const { currentIcon, currentTemperatureInC, currently, currentTime, currentLocation, hours } = this.state
 
 		// convert feelslike temp
 		const feelsLike = handleFtoC(currently.apparentTemperature)
+		if(this.state.loading) {
+			return ( 
+				<div className='bolt'>
+					<i class='uil uil-bolt-alt'></i>
+					<div>loading forecast</div>
+				</div>
+			)
+		} else {
+			return (
+				<div className='background' style={{ 'backgroundImage': `url(${this.state.images[currentIcon]})` }} >
+					<div className="background-overlay"></div>
+						<div className="container">
+							<LocationDisplay 
+								lastUpdated={currentTime} 
+								currentLocation={currentLocation}
+							/>
+							<CurrentlyDisplay 
+								degree={ currentTemperatureInC } 
+								summary={ currently.summary }
+								feelsLike={ Number.isNaN(feelsLike) ? '' : feelsLike }
+							/>
+							<NextTwentyFour 
+								hours={ hours }
+							/>
 
-		return (
-			<div className='background'>
-				<div className="background-overlay"></div>
-					<div className="container">
-						<LocationDisplay 
-							lastUpdated={currentTime} 
-							currentLocation={currentLocation}
-						/>
-						<CurrentlyDisplay 
-							degree={ currentTemperatureInC } 
-							summary={ currently.summary }
-							feelsLike={ Number.isNaN(feelsLike) ? '' : feelsLike }
-						/>
-						<NextTwentyFour 
-							hours={ hours }
-						/>
-
-						<DarkSkyAttribution />
-					</div>
-			</div>
-		)
+							<DarkSkyAttribution />
+						</div>
+				</div>
+			)
+		}
 	}
 }
 
