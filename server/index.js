@@ -11,7 +11,7 @@ const googleMapsClient = require('@google/maps').createClient({
 	Promise: Promise
 });
 
-const whitelist = ['http://localhost:8080', 'http://127.0.0.1:50547']
+const whitelist = ['http://localhost:8080']
 const options = {
 	origin: whitelist,
 	optionsSuccessStatus: 200
