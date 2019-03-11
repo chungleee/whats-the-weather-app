@@ -1,3 +1,4 @@
+const path = require('path')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
@@ -17,10 +18,13 @@ const options = {
 	optionsSuccessStatus: 200
 }
 
+app.use(express.static(path.join(__dirname, '../public')))
 app.use(cors(options))
 app.use(morgan('tiny'))
 
-const url = 'https://api.darksky.net/forecast/0123456789abcdef9876543210fedcba/42.3601,-71.0589'
+app.get('*', (req, res) => {
+	res.sendFile(path.join(__dirname, '../public/index.html'))
+})
 
 app.get('/currently/:latitude,:longitude', (req, res) => {
 	const latitude = req.params.latitude

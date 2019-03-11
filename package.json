@@ -6,7 +6,8 @@
     "start": "concurrently \"yarn start-server\" \"yarn dev\" ",
     "start-server": "nodemon ./server/index.js",
     "dev": "webpack-dev-server --mode development --open --hot",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "heroku-postbuild": "yarn build"
   },
   "repository": "git@github.com:chungleee/whats-the-weather-app.git",
   "author": "Leon <leon.karho.chung@gmail.com>",
