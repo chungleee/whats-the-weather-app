@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"yarn start-server\" \"yarn dev\" ",
-    "start-server": "nodemon ./server/index.js",
+    "start-server": "node ./server/index.js",
     "dev": "webpack-dev-server --mode development --open --hot",
     "build": "webpack --mode production",
     "heroku-postbuild": "yarn build"
