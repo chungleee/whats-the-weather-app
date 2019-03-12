@@ -1,22 +1,10 @@
 import React, { Component } from 'react'
-import { handleFtoC, handleUnixToDay, handleUnixToHours } from './util/utilities'
+import { handleGetLocation, handleFtoC, handleUnixToDay, handleUnixToHours, importAll } from './util/utilities'
 import axios from 'axios'
 import LocationDisplay from './components/LocationDisplay';
 import CurrentlyDisplay from './components/CurrentlyDisplay';
 import DarkSkyAttribution from './components/DarkSkyAttribution';
 import NextTwentyFour from './components/NextTwentyFour';
-
-// import all images in ./img
-// const importAll = (r) => {
-// 	let images = {}
-// 	r.keys().forEach((image, index) => {
-// 		images[image.replace('./', '').replace('.jpg', '')] = r(image)
-// 	})
-// 	return images
-// }
-
-// const images = importAll(require.context('./img', false, /\.(jpg|png)$/))
-
 
 class App extends Component {
 	state = {
@@ -42,13 +30,13 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-		const images = this.importAll(require.context('./img', false, /\.(jpg|png)$/))
+		const images = importAll(require.context('./img', false, /\.(jpg|png)$/))
 
 		this.setState({
 			images
 		})
 
-		this.handleGetLocation()
+		handleGetLocation()
 			.then((position) => {
 				this.handleGetWeather(position.coords)
 			})
@@ -83,43 +71,6 @@ class App extends Component {
 		} else {
 			console.log('false')
 		}
-	}
-
-	importAll = (r) => {
-		let images = {}
-		r.keys().forEach((image, index) => {
-			images[image.replace('./', '').replace('.jpg', '')] = r(image)
-		})
-		return images
-	}
-
-	// get location
-	handleGetLocation = () => {
-		return new Promise((resolve, reject) => {
-			// success cb
-			const success = (position) => {
-				resolve(position)	
-			}
-			// error cb
-			const error = (err) => {
-				reject(alert(`ERROR(${err.code}): ${err.message}`))
-			}
-			// options obj
-			const options = {
-				enableHighAccuracy: true,
-				timeout: 5000,
-				maximumAge: 0
-			}
-
-			if(navigator.geolocation) {
-				navigator
-					.geolocation
-					.getCurrentPosition(success, error, options)
-			}	else {
-				reject('Geolocation is NOT available')
-			}
-
-		})	
 	}
 
 	// request to get weather json data

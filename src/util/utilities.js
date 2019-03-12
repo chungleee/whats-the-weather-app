@@ -15,3 +15,41 @@ export const handleFtoC = (f) => {
 	const c = (f - 32) * 5/9
 	return Math.round( c * 10 ) / 10 .toString()
 }
+
+// import images with webpack require.context
+export const importAll = (r) => {
+	let images = {}
+	r.keys().forEach((image, index) => {
+		images[image.replace('./', '').replace('.jpg', '')] = r(image)
+	})
+	return images
+}
+
+// get location
+export const handleGetLocation = () => {
+	return new Promise((resolve, reject) => {
+		// success cb
+		const success = (position) => {
+			resolve(position)	
+		}
+		// error cb
+		const error = (err) => {
+			reject(alert(`ERROR(${err.code}): ${err.message}`))
+		}
+		// options obj
+		const options = {
+			enableHighAccuracy: true,
+			timeout: 5000,
+			maximumAge: 0
+		}
+
+		if(navigator.geolocation) {
+			navigator
+				.geolocation
+				.getCurrentPosition(success, error, options)
+		}	else {
+			reject('Geolocation is NOT available')
+		}
+
+	})	
+}
