@@ -18,13 +18,13 @@ const options = {
 	optionsSuccessStatus: 200
 }
 
-app.use(express.static(path.join(__dirname, '../public')))
+// app.use(express.static(path.join(__dirname, '../public')))
 app.use(cors(options))
 app.use(morgan('tiny'))
 
-app.get('*', (req, res) => {
-	res.sendFile(path.join(__dirname, '../public/index.html'))
-})
+// app.get('*', (req, res) => {
+// 	res.sendFile(path.join(__dirname, '../public/index.html'))
+// })
 
 app.get('/currently/:latitude,:longitude', (req, res) => {
 	const latitude = req.params.latitude

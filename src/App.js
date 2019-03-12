@@ -166,7 +166,7 @@ class App extends Component {
 		if(this.state.loading) {
 			return ( 
 				<div className='bolt'>
-					<i class='uil uil-bolt-alt'></i>
+					<i className='uil uil-bolt-alt'></i>
 					<div>loading forecast</div>
 				</div>
 			)
